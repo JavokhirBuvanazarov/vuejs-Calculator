@@ -118,6 +118,7 @@
     },
 
     methods: {
+      //reusable function for logging table
       fetchdata() {
          axios.get('https://vuejs-calculator.firebaseio.com/calculation.json')
         .then(res => this.calculations = res.data)
