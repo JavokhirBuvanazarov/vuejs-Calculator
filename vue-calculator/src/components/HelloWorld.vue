@@ -89,7 +89,7 @@
       </div>
     <div class="history">
       <ul>
-        <li v-for="calculation in calculations">
+        <li v-for="(calculation,i) in calculations" :key="i">
           <span>{{calculation.calculation}}</span> <span style="margin-left: 20px">{{calculation.date}}</span>
         </li>
       </ul>
@@ -112,13 +112,17 @@
       }
     },
 
+
     created(){
-      axios.get('https://vuejs-calculator.firebaseio.com/calculation.json')
-        .then(res => this.calculations = res.data)
-        .catch(err => console.log(err))
+      this.fetchdata()
     },
 
     methods: {
+      fetchdata() {
+         axios.get('https://vuejs-calculator.firebaseio.com/calculation.json')
+        .then(res => this.calculations = res.data)
+        .catch(err => console.log(err))
+      },
       operate(element) {
         let operator = this.formula.charAt(this.formula.length-1);
         console.log(operator);
@@ -143,9 +147,11 @@
           calculation: this.formula,
           date: today
         }
-
         axios.post('https://vuejs-calculator.firebaseio.com/calculation.json',data)
-          .then(res => console.log(res))
+          .then(res => {
+            this.fetchdata()
+            console.log(res)
+            })
           .catch(err => console.log(err))
       },
 
